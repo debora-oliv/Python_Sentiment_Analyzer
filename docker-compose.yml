@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: sentiment_redis
+    # Verifica se o serviço dentro do container está realmente funcionando
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:15
+    container_name: sentiment_db
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Permite a persistância dos dados
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # Inicializa o banco de dados com a tabela 'sentiments' já criada e com permissão readonly (ro) para o container
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: sentiment_api
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./api:/app
+      - ./config.py:/app/config.py
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy # Só sobe quando o banco de dados estiver realmente funcionando
+      redis:
+        condition: service_healthy # Só sobe quando o Redis estiver realmente funcionando
+
+  worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    env_file:
+      - .env
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./worker:/app
+      - ./config.py:/app/config.py
+    depends_on:
+      db:
+        condition: service_healthy 
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
