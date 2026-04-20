@@ -30,6 +30,7 @@ services:
       - "5432:5432"
 
   api:
+    # image: deboraalves/sentiment-analyzer-api
     build:
       context: .
       dockerfile: api/Dockerfile
@@ -50,6 +51,7 @@ services:
         condition: service_healthy # Só sobe quando o Redis estiver realmente funcionando
 
   worker:
+    # image: deboraalves/sentiment-analyzer-worker
     build:
       context: .
       dockerfile: worker/Dockerfile
