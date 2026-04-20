@@ -1,0 +1,5 @@
+textblob
+redis
+psycopg2-binary
+pydantic-settings
+pydantic
