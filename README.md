@@ -1,14 +1,16 @@
 # Sumário
 
-- ### [Sobre o Projeto](#sobre-o-projeto)
+- [Sobre o Projeto](#sobre-o-projeto)
 
-- ### [Estrutura](#estrutura)
+- [Estrutura](#estrutura)
 
-- ### [Serviços](#serviços)
+- [Serviços](#serviços)
 
-- ### [Fluxo de Dados](#fluxo-de-dados)
+- [Fluxo de Dados](#fluxo-de-dados)
 
-- ### [Execução e Teste](#execução-e-teste)
+- [Execução e Teste](#execução-e-teste)
+
+- [Docker Cheat Sheet](#docker-cheat-sheet)
 
 
 # Sobre o Projeto
@@ -156,3 +158,26 @@ O Docker vai baixar as imagens (Python, Redis, Postgres), rodar os Dockerfiles, 
 - Com o container rodando, abra o arquivo ```api/main.py``` e altere a mensagem do endpoint raiz (/).
 
 - Salve o arquivo e confira novamente ```http://localhost:8000/```.
+
+# Docker Cheat Sheet
+
+| Comando | Descrição |
+| :--- | :--- |
+| ``` docker ps -a ``` | Lista todos os containers (ativos e inativos) |
+| ``` docker docker logs -f <id/nome>``` | Exibe e acompanha os logs de um container |
+| ``` docker stop <id/nome> ``` | Para a execução de um container |
+| ``` docker start <id/nome> ``` | Inicia um container parado |
+| ``` docker rm <id/nome> ``` | Remove um container parado |
+| ``` docker images ``` | Lista todas as imagens locais |
+| ``` docker pull ``` | Baixa uma imagem do Docker Hub |
+| ``` docker build -t <nome>:<tag> . ``` | Cria uma imagem a partir de um Dockerfile |
+| ``` docker run <imagem> ``` | Cria e inicia um container a partir de uma imagem |
+| ``` docker rmi <id/nome> ``` | Remove uma imagem |
+| ``` docker compose up -d ``` | Sobe os serviços em segundo plano (detached mode) |
+| ``` docker compose up --build ``` | Força a reconstrução das imagens antes de subir |
+| ``` docker compose up -d ``` | Sobe os serviços em segundo plano (detached mode) |
+| ``` docker compose down ``` | Remove containers e redes criados pelo compose |
+| ``` docker compose down -v ``` | Remove containers e também os volumes nomeados |
+| ``` docker system prune -a --volumes ``` | Remove tudo o que não está sendo usado |
+
+
