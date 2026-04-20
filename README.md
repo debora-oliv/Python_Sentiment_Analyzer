@@ -32,6 +32,7 @@ sentiment-analyzer/
 ├── config.py                 # Configuração para leitura das variáveis de ambiente
 └── .env.example              # Template de variáveis de ambiente
 ```
+
 # Serviços
 
 ```redis```: Imagem oficial do Redis para atuar como broker de mensagens.
