@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS sentiments (
+    id SERIAL PRIMARY KEY,
+    text_content TEXT NOT NULL,
+    score FLOAT NOT NULL,
+    label VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
