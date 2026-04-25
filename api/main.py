@@ -22,4 +22,4 @@ async def analyze_text(request: TextRequest):
 
 @app.get("/")
 def read_root():
-    return {"API funcionando! | user_db": settings.postgres_user}
+    return {"status": "ok", "message": "API funcionando!"}
