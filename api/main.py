@@ -1,6 +1,6 @@
 from config import settings
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import json
 import redis
 
@@ -9,12 +9,10 @@ app = FastAPI(title="Analisador de Sentimentos")
 cache = redis.Redis(host=settings.redis_host, port=6379, db=0)
 
 class TextRequest(BaseModel):
-    content: str
+    content: str = Field(min_length=1, description="Texto a ser analisado. Não pode estar vazio.")
 
 @app.post("/analyze")
 async def analyze_text(request: TextRequest):
-    if not request.content:
-        raise HTTPException(status_code=400, detail="Conteúdo não pode estar vazio.")
 
     dados_job = json.dumps({"text": request.content})
 
