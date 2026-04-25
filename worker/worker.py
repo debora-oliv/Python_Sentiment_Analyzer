@@ -62,6 +62,4 @@ def process_queue():
                 cur = conn.cursor()
 
 if __name__ == "__main__":
-    # Delay inicial de 5 segundos para garantir que os serviços dependentes subiram
-    time.sleep(5)
     process_queue()
