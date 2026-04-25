@@ -21,22 +21,20 @@ def get_db_connection():
 
 def process_queue():
     print("Worker iniciado e conectado!")
-    
-    # Inicializar conexões necessárias
+
     r = redis.Redis(host=settings.redis_host, port=6379, db=0)
     conn = get_db_connection()
     cur = conn.cursor()
 
     while True:
         try:
-            # Remove e retorna o primeiro elemento da lista sentiments_queue
             _, message = r.blpop('sentiments_queue')
             data = json.loads(message)
             text = data.get("text")
 
             analysis = TextBlob(text)
-            score = analysis.sentiment.polarity # Assume um valor entre -1 e 1
-            
+            score = analysis.sentiment.polarity
+
             if score > 0:
                 label = "Positivo"
             elif score < 0:
@@ -54,7 +52,12 @@ def process_queue():
 
         except Exception as e:
             print(f"Erro ao processar item: {e}")
+            try:
+                conn.rollback()
+            except Exception:
+                pass
             if conn.closed:
+                cur.close()
                 conn = get_db_connection()
                 cur = conn.cursor()
 
